@@ -1,5 +1,7 @@
 package Day1.toDoApp.dao;
+
 import Day1.toDoApp.model.Todo;
+
 import java.util.List;
 
 public interface TodoDAO {
