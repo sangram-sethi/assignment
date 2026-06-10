@@ -7,7 +7,7 @@ import Day1.toDoApp.model.Todo;
 import java.util.List;
 
 public class TodoService {
-    private TodoDAOImpl todoDAO;
+    private TodoDAO todoDAO;
 
     public TodoService() {
         this.todoDAO = new TodoDAOImpl();
