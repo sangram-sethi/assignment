@@ -1,0 +1,7 @@
+com\products\dao\ProductDAO.class
+com\products\daoimpl\ProductDAOImpl.class
+com\products\model\Product.class
+com\products\serviceimpl\ProductServiceImpl.class
+com\products\app\App.class
+com\products\service\ProductService.class
+com\products\util\DBManager.class
