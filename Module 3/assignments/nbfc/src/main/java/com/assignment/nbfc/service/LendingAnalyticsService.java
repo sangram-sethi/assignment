@@ -1,5 +1,7 @@
-package com.assignment.nbfc.lending;
+package com.assignment.nbfc.service;
 
+import com.assignment.nbfc.entity.LoanApplication;
+import com.assignment.nbfc.repository.LoanApplicationRepository;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -12,41 +14,34 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import org.springframework.stereotype.Service;
 
 /**
- * Real-Time Lending Risk Analytics Engine.
+ * Real-Time Lending Risk Analytics Engine (business layer).
  *
- * <p>Ingests raw loan application records arriving from multiple partner banks /
- * NBFCs, removes duplicates and invalid records, and produces a variety of risk
- * and analytics reports.
+ * <p>Parses and validates raw loan application records, delegates persistence and
+ * deduplication to {@link LoanApplicationRepository}, and produces the risk and
+ * analytics reports consumed by the REST layer.
  */
-public class LendingAnalytics {
+@Service
+public class LendingAnalyticsService {
+
+    private final LoanApplicationRepository repository;
+
+    public LendingAnalyticsService(LoanApplicationRepository repository) {
+        this.repository = repository;
+    }
+
+    // ----------------------------------------------------------- ingestion / CRUD
 
     /**
-     * Deduplicated, validated applications keyed by their unique application id.
-     */
-    private final Map<String, LoanApplication> applications = new java.util.HashMap<>();
-
-    /**
-     * Duplicate-resolution ordering (Rule 1). The "winning" record sorts first:
-     * higher credit score, then lower loan amount, then lexicographically smaller
-     * customer name.
-     */
-    private static final Comparator<LoanApplication> DUPLICATE_RESOLVER =
-            Comparator.comparingInt(LoanApplication::getCreditScore).reversed()
-                    .thenComparingDouble(LoanApplication::getLoanAmount)
-                    .thenComparing(LoanApplication::getCustomerName);
-
-    /**
-     * Rule 1 + Rule 2 — parse, validate and deduplicate the incoming records.
+     * Rule 1 + Rule 2 — parse, validate and store the incoming raw records.
      *
      * <p>Invalid records (Rule 2) are ignored: {@code null} / blank lines, lines
      * not containing exactly six fields, empty mandatory fields, non-numeric
      * amount / score, loan amount {@code <= 0}, or a credit score outside the
-     * inclusive range {@code [300, 900]}.
-     *
-     * <p>When two records share an application id (Rule 1), the better record is
-     * retained using {@link #DUPLICATE_RESOLVER}.
+     * inclusive range {@code [300, 900]}. Duplicate ids (Rule 1) are resolved by
+     * the repository.
      */
     public void loadApplications(List<String> records) {
         if (records == null) {
@@ -85,14 +80,66 @@ public class LendingAnalytics {
                 continue;
             }
 
-            LoanApplication candidate = new LoanApplication(
-                    applicationId, customerName, lenderName, loanType, loanAmount, creditScore);
-
-            applications.merge(applicationId, candidate,
-                    (existing, incoming) ->
-                            DUPLICATE_RESOLVER.compare(existing, incoming) <= 0 ? existing : incoming);
+            repository.save(new LoanApplication(
+                    applicationId, customerName, lenderName, loanType, loanAmount, creditScore));
         }
     }
+
+    /**
+     * Validates and stores a single structured application, applying the same
+     * business rules as {@link #loadApplications(List)}.
+     *
+     * @throws IllegalArgumentException when any mandatory field is blank, the loan
+     *                                  amount is non-positive, or the credit score
+     *                                  is outside {@code [300, 900]}
+     */
+    public LoanApplication addApplication(LoanApplication application) {
+        validate(application);
+        return repository.save(application);
+    }
+
+    public List<LoanApplication> findAll() {
+        return repository.findAll();
+    }
+
+    public Optional<LoanApplication> findById(String applicationId) {
+        return repository.findById(applicationId);
+    }
+
+    public boolean deleteById(String applicationId) {
+        return repository.deleteById(applicationId);
+    }
+
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
+    public long count() {
+        return repository.count();
+    }
+
+    private void validate(LoanApplication application) {
+        if (application == null) {
+            throw new IllegalArgumentException("Loan application must not be null");
+        }
+        if (isBlank(application.getApplicationId()) || isBlank(application.getCustomerName())
+                || isBlank(application.getLenderName()) || isBlank(application.getLoanType())) {
+            throw new IllegalArgumentException(
+                    "applicationId, customerName, lenderName and loanType are mandatory");
+        }
+        if (application.getLoanAmount() <= 0) {
+            throw new IllegalArgumentException("loanAmount must be greater than 0");
+        }
+        if (application.getCreditScore() < 300 || application.getCreditScore() > 900) {
+            throw new IllegalArgumentException("creditScore must be within the inclusive range [300, 900]");
+        }
+    }
+
+    private static boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    // ----------------------------------------------------------------- analytics
 
     /**
      * Rule 3 — the {@code n} strongest credit profiles, ordered by credit score
@@ -102,7 +149,7 @@ public class LendingAnalytics {
         if (n <= 0) {
             return List.of();
         }
-        return applications.values().stream()
+        return repository.findAll().stream()
                 .sorted(Comparator.comparingInt(LoanApplication::getCreditScore).reversed()
                         .thenComparingDouble(LoanApplication::getLoanAmount)
                         .thenComparing(LoanApplication::getCustomerName))
@@ -115,7 +162,7 @@ public class LendingAnalytics {
      * to two decimal places.
      */
     public Map<String, Double> averageLoanAmountByType() {
-        return applications.values().stream()
+        return repository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         LoanApplication::getLoanType,
                         TreeMap::new,
@@ -129,7 +176,7 @@ public class LendingAnalytics {
      * higher credit score and then by smaller application id.
      */
     public Optional<LoanApplication> highestLoanApplication() {
-        return applications.values().stream()
+        return repository.findAll().stream()
                 .max(Comparator.comparingDouble(LoanApplication::getLoanAmount)
                         .thenComparingInt(LoanApplication::getCreditScore)
                         .thenComparing(LoanApplication::getApplicationId, Comparator.reverseOrder()));
@@ -139,7 +186,7 @@ public class LendingAnalytics {
      * Rule 6 — lenders that offer more than one distinct loan type, sorted.
      */
     public Set<String> lendersWithMultipleLoanTypes() {
-        return applications.values().stream()
+        return repository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         LoanApplication::getLenderName,
                         Collectors.mapping(LoanApplication::getLoanType, Collectors.toSet())))
@@ -159,7 +206,7 @@ public class LendingAnalytics {
                 Comparator.comparingInt(LoanApplication::getCreditScore).reversed()
                         .thenComparingDouble(LoanApplication::getLoanAmount);
 
-        Map<String, List<LoanApplication>> sorted = applications.values().stream()
+        Map<String, List<LoanApplication>> sorted = repository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         LoanApplication::getLenderName,
                         TreeMap::new,
@@ -180,7 +227,7 @@ public class LendingAnalytics {
      * holds.
      */
     public List<String> suspiciousApplications() {
-        Collection<LoanApplication> apps = applications.values();
+        Collection<LoanApplication> apps = repository.values();
 
         // Loan-type level aggregates (precise, un-rounded) used by conditions 3 & 4.
         Map<String, Double> avgAmountByType = apps.stream()
@@ -263,7 +310,7 @@ public class LendingAnalytics {
                         .thenComparing(Comparator.comparingDouble(LoanApplication::getLoanAmount).reversed())
                         .thenComparing(Comparator.comparing(LoanApplication::getCustomerName).reversed());
 
-        return applications.values().stream()
+        return repository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         LoanApplication::getLoanType,
                         Collectors.groupingBy(

@@ -1,7 +1,7 @@
-package com.assignment.nbfc.lending;
+package com.assignment.nbfc.entity;
 
 /**
- * Immutable loan application record received from a partner bank / NBFC.
+ * Immutable loan application entity received from a partner bank / NBFC.
  *
  * <p>Wire format of an incoming record:
  * {@code APPLICATION_ID|CUSTOMER_NAME|LENDER_NAME|LOAN_TYPE|LOAN_AMOUNT|CREDIT_SCORE}
