@@ -1,0 +1,10 @@
+package org.northernarc.assessment4.exception;
+
+/**
+ * Thrown when a requested account cannot be located.
+ */
+public class AccountNotFoundException extends RuntimeException {
+    public AccountNotFoundException(String message) {
+        super(message);
+    }
+}
