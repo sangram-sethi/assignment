@@ -1,0 +1,11 @@
+InvestorID,InvestorName,Age,City,AnnualIncome,RiskProfile,TotalInvestment,TransactionCount,Qualification
+INV006,Ananya Iyer,30,Coimbatore,720000,Moderate,17193.0,5.0,Fallback:TopByInvestment
+INV004,Neha Gupta,27,Pune,650000,Moderate,16783.75,5.0,Fallback:TopByInvestment
+INV001,Aarav Sharma,29,Chennai,850000,Moderate,15176.8,5.0,Fallback:TopByInvestment
+INV007,Vikram Singh,45,Delhi,2100000,High,14861.75,5.0,Fallback:TopByInvestment
+INV010,Sneha Kapoor,32,Mumbai,1300000,Low,14051.8,5.0,Fallback:TopByInvestment
+INV002,Priya Nair,35,Bangalore,1200000,Low,13733.15,5.0,Fallback:TopByInvestment
+INV003,Rahul Verma,41,Hyderabad,1500000,High,13309.2,5.0,Fallback:TopByInvestment
+INV009,Arjun Reddy,26,Hyderabad,550000,High,12240.55,4.0,Fallback:TopByInvestment
+INV008,Meera Krishnan,38,Kochi,1450000,Moderate,11242.3,5.0,Fallback:TopByInvestment
+INV005,Karthik Raj,33,Chennai,980000,Low,10744.8,5.0,Fallback:TopByInvestment

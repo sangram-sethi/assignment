@@ -1,0 +1,50 @@
+{
+  "numpy_metrics": {
+    "mean_investment_amount": 2843.6142857142854,
+    "median_investor_income": 1170000.0,
+    "std_of_nav": 13.402257571021382,
+    "fund_return_90th_pct": 3.4384905660377334,
+    "fund_return_95th_pct": 3.452578616352196,
+    "corr_income_vs_investment": -0.19191982649389291,
+    "average_daily_nav": 35.12
+  },
+  "finance_metrics": {
+    "total_portfolio_value": 94046.8,
+    "net_invested": 92732.5,
+    "absolute_return": 1314.3,
+    "portfolio_return_pct": 1.42,
+    "cagr_pct": 77.03,
+    "annualized_return_pct": 57.52,
+    "diversification_score": 0.7329,
+    "average_holding_period_days": 4.6,
+    "expense_ratio_impact": 1090.2,
+    "sharpe_ratio": 12.9183
+  },
+  "fund_insights": {
+    "best_performing_fund": {
+      "FundID": "F102",
+      "FundName": "Bluechip Equity Fund",
+      "ReturnPct": 3.47
+    },
+    "worst_performing_fund": {
+      "FundID": "F105",
+      "FundName": "Small Cap Opportunities",
+      "ReturnPct": 2.19
+    },
+    "highest_expense_ratio": {
+      "FundID": "F150",
+      "FundName": "Emerging Markets Fund",
+      "ExpenseRatio": 1.88
+    },
+    "highest_aum_fund": {
+      "FundID": "F105",
+      "FundName": "Small Cap Opportunities",
+      "AUM": 33051.0
+    },
+    "most_popular_fund": {
+      "FundID": "F101",
+      "FundName": "Alpha Growth Fund",
+      "TransactionCount": 10
+    }
+  }
+}

@@ -1,0 +1,38 @@
+2026-07-21 17:32:54 | INFO     | mfdashboard | === Mutual Fund Performance Dashboard: START ===
+2026-07-21 17:32:54 | INFO     | mfdashboard | Loaded investors.csv (50 rows, 6 cols)
+2026-07-21 17:32:54 | INFO     | mfdashboard | Loaded funds.csv (50 rows, 6 cols)
+2026-07-21 17:32:54 | INFO     | mfdashboard | Loaded transactions.csv (50 rows, 8 cols)
+2026-07-21 17:32:54 | INFO     | mfdashboard | Loaded nav_history.csv (50 rows, 3 cols)
+2026-07-21 17:32:54 | INFO     | mfdashboard | Successfully loaded 4/4 datasets.
+2026-07-21 17:32:54 | INFO     | mfdashboard | Standardised transactions (derived Amount = Units x NAV).
+2026-07-21 17:32:54 | INFO     | mfdashboard | Imputed AnnualIncome (0 nulls -> median 1170000.00).
+2026-07-21 17:32:54 | INFO     | mfdashboard | Imputed RiskProfile (0 nulls -> 'Moderate').
+2026-07-21 17:32:54 | INFO     | mfdashboard | Imputed ExpenseRatio (0 nulls -> mean 1.0938).
+2026-07-21 17:32:54 | INFO     | mfdashboard | Imputed NAV (0 nulls -> previous day NAV per fund).
+2026-07-21 17:32:54 | INFO     | mfdashboard | Removed 1 transaction outlier(s) with Amount > 99th pct (5890.29).
+2026-07-21 17:32:54 | INFO     | mfdashboard | Removed 0 NAV outlier(s) with daily change > 3 std (0.0894).
+2026-07-21 17:32:54 | INFO     | mfdashboard | Data cleaning pipeline complete.
+2026-07-21 17:32:54 | INFO     | mfdashboard | Computed NumPy statistical metrics.
+2026-07-21 17:32:54 | INFO     | mfdashboard | Built merged master dataset (49 rows).
+2026-07-21 17:32:54 | INFO     | mfdashboard | FundPortfolio initialised with 49 holdings.
+2026-07-21 17:32:54 | INFO     | mfdashboard | Identified top 20 investors by portfolio value.
+2026-07-21 17:32:54 | WARNING  | mfdashboard | No investor met strict criteria (TotalInvestment>1,000,000, TransactionCount>10, RiskProfile=High, AnnualIncome>1,500,000). Falling back to top 10 by total investment.
+2026-07-21 17:32:55 | INFO     | mfdashboard | Completed fund analysis (best/worst/expense/AUM/popularity).
+2026-07-21 17:32:55 | INFO     | mfdashboard | Computed portfolio finance metrics summary.
+2026-07-21 17:32:55 | INFO     | mfdashboard | Saved chart: output\charts\portfolio_allocation_pie.png
+2026-07-21 17:32:55 | INFO     | mfdashboard | Saved chart: output\charts\fundwise_investment_bar.png
+2026-07-21 17:32:55 | INFO     | mfdashboard | Saved chart: output\charts\monthly_investment_trend.png
+2026-07-21 17:32:55 | INFO     | mfdashboard | Saved chart: output\charts\daywise_investment_trend.png
+2026-07-21 17:32:55 | INFO     | mfdashboard | Saved chart: output\charts\category_investment_bar.png
+2026-07-21 17:32:55 | INFO     | mfdashboard | Saved chart: output\charts\nav_movement_line.png
+2026-07-21 17:32:55 | INFO     | mfdashboard | Identified top 10 investors by portfolio value.
+2026-07-21 17:32:56 | INFO     | mfdashboard | Saved chart: output\charts\top10_investors_barh.png
+2026-07-21 17:32:56 | INFO     | mfdashboard | Generated 7 charts.
+2026-07-21 17:32:56 | INFO     | mfdashboard | Exported report: output\reports\top20_investors.csv (10 rows)
+2026-07-21 17:32:56 | INFO     | mfdashboard | Exported report: output\reports\high_value_investors.csv (10 rows)
+2026-07-21 17:32:56 | INFO     | mfdashboard | Exported report: output\reports\fund_allocation.csv (5 rows)
+2026-07-21 17:32:56 | INFO     | mfdashboard | Exported report: output\reports\category_investment.csv (3 rows)
+2026-07-21 17:32:56 | INFO     | mfdashboard | Exported report: output\reports\investor_profit_loss.csv (10 rows)
+2026-07-21 17:32:56 | INFO     | mfdashboard | Wrote summary report: output\reports\summary_report.md
+2026-07-21 17:32:56 | INFO     | mfdashboard | Wrote metrics JSON: output\reports\summary_metrics.json
+2026-07-21 17:32:56 | INFO     | mfdashboard | === Mutual Fund Performance Dashboard: SUCCESS ===
