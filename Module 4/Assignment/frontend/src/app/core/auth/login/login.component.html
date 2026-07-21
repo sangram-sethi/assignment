@@ -1,0 +1,32 @@
+<section class="login">
+  <div class="login-brand">
+    <span class="brand-mark">◆</span>
+    <span class="brand-name">MyShop</span>
+  </div>
+  <h1>Welcome back</h1>
+  <p class="login-sub">Sign in to continue shopping</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      Username
+      <input type="text" formControlName="username" autocomplete="username" />
+    </label>
+
+    <label>
+      Password
+      <input type="password" formControlName="password" autocomplete="current-password" />
+    </label>
+
+    @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+      <p class="error">Password must be more than 6 characters.</p>
+    }
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Signing in…' : 'Sign in' }}
+    </button>
+  </form>
+</section>

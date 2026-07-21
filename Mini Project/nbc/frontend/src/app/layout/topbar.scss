@@ -1,0 +1,247 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 66px;
+  padding: 0 clamp(1rem, 3vw, 1.6rem);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  backdrop-filter: blur(18px) saturate(150%);
+  border-bottom: 1px solid var(--line);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex: 1;
+  min-width: 0;
+}
+.hb {
+  display: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: min(420px, 100%);
+  padding: 0.62rem 0.85rem;
+  border-radius: 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--faint);
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.search:hover {
+  border-color: var(--line-strong);
+  color: var(--muted);
+  background: var(--surface-2);
+}
+.search .ph {
+  flex: 1;
+  text-align: left;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+.search .keys {
+  display: flex;
+  gap: 3px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.ico {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.ico:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+
+.userwrap {
+  position: relative;
+}
+.userbtn {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.32rem 0.5rem 0.32rem 0.35rem;
+  border-radius: 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+.userbtn:hover {
+  border-color: var(--line-strong);
+}
+.avatar {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 0.7rem;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  background: var(--grad-brand);
+  box-shadow: 0 6px 16px -6px var(--glow);
+}
+.avatar.lg {
+  width: 46px;
+  height: 46px;
+  border-radius: 0.85rem;
+  font-size: 0.95rem;
+}
+.meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+.meta .nm {
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: var(--ink);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.meta .rl {
+  font-size: 0.7rem;
+  color: var(--faint);
+}
+.chev {
+  color: var(--faint);
+  transition: transform 0.3s ease;
+}
+.chev.up {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 244px;
+  padding: 0.5rem;
+  border-radius: 1.1rem;
+  box-shadow: var(--shadow-2);
+  z-index: 50;
+}
+.pop {
+  animation: menu-pop 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
+}
+.pop-out {
+  animation: menu-pop-out 0.18s ease forwards;
+  transform-origin: top right;
+}
+@keyframes menu-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes menu-pop-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+}
+.mhead {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.6rem;
+}
+.mhead .nm {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+.mhead .rl {
+  margin: 0.1rem 0 0;
+  font-size: 0.74rem;
+  color: var(--faint);
+}
+.mi {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.58rem 0.65rem;
+  border-radius: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.mi:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.mi.danger:hover {
+  color: #fb7185;
+  background: rgba(251, 113, 133, 0.1);
+}
+
+@media (max-width: 1024px) {
+  .hb {
+    display: grid;
+  }
+  .search {
+    width: 42px;
+    padding: 0;
+    height: 42px;
+    justify-content: center;
+  }
+  .search .ph,
+  .search .keys {
+    display: none;
+  }
+  .meta {
+    display: none;
+  }
+}

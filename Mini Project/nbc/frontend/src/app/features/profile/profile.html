@@ -1,0 +1,98 @@
+<app-page-header eyebrow="Account" title="Profile" subtitle="Manage your details and preferences." />
+
+@if (loading()) {
+  <div class="grid gap-4 lg:grid-cols-3">
+    <div class="skeleton" style="height: 360px"></div>
+    <div class="skeleton lg:col-span-2" style="height: 360px"></div>
+  </div>
+} @else {
+  <div class="grid gap-4 lg:grid-cols-3 items-start">
+    <div class="card p-6 pcard" reveal="up">
+      <div class="phead">
+        <span class="avatar">{{ avatarText() }}</span>
+        <h2 class="font-display">{{ displayName() }}</h2>
+        <span class="role-badge">
+          <app-icon [name]="auth.isApprover() ? 'shieldCheck' : 'user'" [size]="14" />
+          {{ roleLabel() }}
+        </span>
+      </div>
+
+      @if (isCustomer() && profile()) {
+        <div class="divider" style="margin: 1.3rem 0"></div>
+        <ul class="dlist">
+          @for (d of details(); track d.label) {
+            <li>
+              <span class="di"><app-icon [name]="d.icon" [size]="17" /></span>
+              <div><em>{{ d.label }}</em><b>{{ d.value }}</b></div>
+            </li>
+          }
+          <li>
+            <span class="di"><app-icon name="wallet" [size]="17" /></span>
+            <div><em>Annual income</em><b>{{ profile()!.annualIncome | inr }}</b></div>
+          </li>
+        </ul>
+      } @else {
+        <div class="divider" style="margin: 1.3rem 0"></div>
+        <p class="approver-note">
+          <app-icon name="shieldCheck" [size]="18" />
+          You review and decide on customer loan applications.
+        </p>
+      }
+
+      <button class="btn btn-ghost w-full signout" type="button" (click)="auth.logout()">
+        <app-icon name="logout" [size]="18" /> Sign out
+      </button>
+    </div>
+
+    <div class="lg:col-span-2 flex flex-col gap-4">
+      @if (isCustomer() && summary()) {
+        <div class="card p-6" reveal="up">
+          <h3 class="sec-title">Loan activity</h3>
+          <div class="act-grid">
+            <div class="act">
+              <span class="ai" style="background: linear-gradient(135deg, #7c5cff, #b06bff)"><app-icon name="list" [size]="18" /></span>
+              <b class="tabular">{{ summary()!.totalApplications }}</b><em>Total</em>
+            </div>
+            <div class="act">
+              <span class="ai" style="background: linear-gradient(135deg, #34d399, #10b981)"><app-icon name="checkCircle" [size]="18" /></span>
+              <b class="tabular">{{ summary()!.approvedApplications }}</b><em>Approved</em>
+            </div>
+            <div class="act">
+              <span class="ai" style="background: linear-gradient(135deg, #fbbf24, #f59e0b)"><app-icon name="clock" [size]="18" /></span>
+              <b class="tabular">{{ summary()!.pendingApplications }}</b><em>Pending</em>
+            </div>
+            <div class="act">
+              <span class="ai" style="background: linear-gradient(135deg, #fb7185, #ef4444)"><app-icon name="xCircle" [size]="18" /></span>
+              <b class="tabular">{{ summary()!.rejectedApplications }}</b><em>Rejected</em>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="card p-6" reveal="up" [revealDelay]="0.05">
+        <h3 class="sec-title">Appearance</h3>
+        <p class="muted-p">Choose how Aurora looks to you.</p>
+        <div class="theme-opts">
+          <button class="topt" type="button" [class.on]="theme.theme() === 'dark'" (click)="theme.set('dark')">
+            <span class="sw dark"><app-icon name="moon" [size]="16" /></span>
+            <span>Dark</span>
+            @if (theme.theme() === 'dark') { <app-icon name="check" [size]="16" class="ck" /> }
+          </button>
+          <button class="topt" type="button" [class.on]="theme.theme() === 'light'" (click)="theme.set('light')">
+            <span class="sw light"><app-icon name="sun" [size]="16" /></span>
+            <span>Light</span>
+            @if (theme.theme() === 'light') { <app-icon name="check" [size]="16" class="ck" /> }
+          </button>
+        </div>
+      </div>
+
+      <div class="card p-6 tip" reveal="up" [revealDelay]="0.1">
+        <span class="tipic"><app-icon name="command" [size]="20" /></span>
+        <div>
+          <b>Quick navigation</b>
+          <p>Press <span class="kbd">⌘</span><span class="kbd">K</span> (or <span class="kbd">Ctrl</span><span class="kbd">K</span>) to open the command palette anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

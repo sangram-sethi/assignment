@@ -1,0 +1,1 @@
+import {g,aF as Dg,aG as r,ad as C}from'./main-RVW47PWA.js';var a=class e{http=g(Dg);api=g(r);getProfile(){return this.http.get(`${this.api}/customers/profile`)}getLoanSummary(){return this.http.get(`${this.api}/customers/loan-summary`)}static \u0275fac=function(m){return new(m||e)};static \u0275prov=C({token:e,factory:e.\u0275fac,providedIn:"root"})};export{a};

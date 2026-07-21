@@ -1,0 +1,142 @@
+<app-page-header
+  eyebrow="Overview"
+  [title]="greeting()"
+  subtitle="Here's a snapshot of your lending activity."
+>
+  <a class="btn btn-ghost" routerLink="/calculator" magnetic>
+    <app-icon name="calculator" [size]="18" /> EMI Calculator
+  </a>
+  <a class="btn btn-primary" routerLink="/apply" magnetic ripple>
+    <app-icon name="plus" [size]="18" /> Apply for a loan
+  </a>
+</app-page-header>
+
+@if (loading()) {
+  <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    @for (i of [1, 2, 3, 4]; track i) {
+      <div class="skeleton" style="height: 152px"></div>
+    }
+  </section>
+  <section class="grid gap-4 mt-4 lg:grid-cols-3">
+    <div class="skeleton lg:col-span-2" style="height: 340px"></div>
+    <div class="skeleton" style="height: 340px"></div>
+  </section>
+} @else {
+  <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <app-stat-card
+      label="Total applications"
+      [value]="summary()!.totalApplications"
+      icon="list"
+      format="number"
+      accent="linear-gradient(135deg,#7c5cff,#b06bff)"
+    />
+    <app-stat-card
+      label="Approved"
+      [value]="summary()!.approvedApplications"
+      icon="checkCircle"
+      format="number"
+      accent="linear-gradient(135deg,#34d399,#10b981)"
+      trend="Live"
+    />
+    <app-stat-card
+      label="Pending review"
+      [value]="summary()!.pendingApplications"
+      icon="clock"
+      format="number"
+      accent="linear-gradient(135deg,#fbbf24,#f59e0b)"
+    />
+    <app-stat-card
+      label="Approved amount"
+      [value]="approvedAmount()"
+      icon="wallet"
+      format="compact"
+      accent="linear-gradient(135deg,#38bdf8,#22d3ee)"
+    />
+  </section>
+
+  <section class="grid gap-4 mt-4 lg:grid-cols-3 items-start">
+    <div class="lg:col-span-2 flex flex-col gap-3">
+      <div class="flex items-center justify-between px-1">
+        <h2 class="text-lg font-extrabold" style="color: var(--ink)">Recent applications</h2>
+        <a routerLink="/loans" class="chip">View all <app-icon name="arrowRight" [size]="14" /></a>
+      </div>
+
+      @if (recent().length) {
+        <div class="flex flex-col gap-3">
+          @for (loan of recent(); track loan.id) {
+            <app-loan-list-item [loan]="loan" />
+          }
+        </div>
+      } @else {
+        <div class="card">
+          <app-empty-state
+            icon="layers"
+            title="No applications yet"
+            sub="Kick things off by applying for your very first loan."
+          >
+            <a class="btn btn-primary" routerLink="/apply" ripple>
+              <app-icon name="plus" [size]="18" /> Apply now
+            </a>
+          </app-empty-state>
+        </div>
+      }
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <div class="card p-5" reveal="up">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold" style="color: var(--ink)">Status mix</h3>
+          <app-icon name="grid" [size]="18" style="color: var(--faint)" />
+        </div>
+
+        @if (hasAny()) {
+          <app-donut-chart
+            [segments]="segments()"
+            [height]="196"
+            [currency]="false"
+            [centerTop]="summary()!.totalApplications.toString()"
+            centerBottom="APPLICATIONS"
+          />
+          <div class="flex flex-col gap-2 mt-4">
+            <div class="flex items-center justify-between text-sm" style="color: var(--muted)">
+              <span class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full" style="background: #34d399"></span> Approved
+              </span>
+              <b style="color: var(--ink)">{{ summary()!.approvedApplications }}</b>
+            </div>
+            <div class="flex items-center justify-between text-sm" style="color: var(--muted)">
+              <span class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full" style="background: #fbbf24"></span> Pending
+              </span>
+              <b style="color: var(--ink)">{{ summary()!.pendingApplications }}</b>
+            </div>
+            <div class="flex items-center justify-between text-sm" style="color: var(--muted)">
+              <span class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full" style="background: #fb7185"></span> Rejected
+              </span>
+              <b style="color: var(--ink)">{{ summary()!.rejectedApplications }}</b>
+            </div>
+          </div>
+        } @else {
+          <p class="text-sm py-6 text-center" style="color: var(--muted)">
+            Apply for a loan to see your status breakdown here.
+          </p>
+        }
+      </div>
+
+      <div class="card p-5 relative overflow-hidden" reveal="up" [revealDelay]="0.08">
+        <span
+          class="grid place-items-center w-10 h-10 rounded-xl mb-3"
+          style="background: var(--grad-brand); color: #fff"
+        >
+          <app-icon name="command" [size]="18" />
+        </span>
+        <h4 class="font-bold" style="color: var(--ink)">Move at the speed of thought</h4>
+        <p class="text-sm mt-1" style="color: var(--muted)">
+          Press <span class="kbd">⌘</span><span class="kbd">K</span> anywhere to search and jump
+          between pages instantly.
+        </p>
+      </div>
+    </div>
+  </section>
+}

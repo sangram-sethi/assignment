@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.classroom.products.dto.OrderItemResponseDTO;
@@ -12,25 +13,44 @@ import com.classroom.products.dto.OrderResponseDTO;
 import com.classroom.products.enums.OrderStatus;
 import com.classroom.products.exception.BadRequestException;
 import com.classroom.products.exception.ResourceNotFoundException;
+import com.classroom.products.model.AppUser;
+import com.classroom.products.model.Customer;
 import com.classroom.products.model.OrderItem;
 import com.classroom.products.model.Orders;
 import com.classroom.products.model.Product;
-import com.classroom.products.repository.CustomerRepository;
 import com.classroom.products.repository.OrdersRepository;
 import com.classroom.products.repository.ProductRepository;
+import com.classroom.products.repository.UserRepository;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final ProductRepository productRepository;
     private final OrdersRepository orderRepository;
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
     public OrderServiceImpl(ProductRepository productRepository, OrdersRepository orderRepository,
-            CustomerRepository customerRepository) {
+            UserRepository userRepository) {
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
-        this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
+    }
+
+    /**
+     * Resolves the Customer profile of the currently authenticated user. Orders
+     * are always tied to this profile so a client can never place or read orders
+     * on behalf of someone else.
+     */
+    private Customer currentCustomer() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        AppUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
+        Customer customer = user.getCustomer();
+        if (customer == null) {
+            throw new BadRequestException(
+                    "Your account is not linked to a customer profile, so it cannot place or view orders.");
+        }
+        return customer;
     }
 
     private Orders findOrderById(Long orderId) {
@@ -118,13 +138,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public List<OrderResponseDTO> getMyOrders() {
+        return orderRepository.findByCustomerCustomerId(currentCustomer().getCustomerId()).stream()
+                .map(this::mapToOrderResponse)
+                .toList();
+    }
+
+    @Override
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public OrderResponseDTO placeOrder(OrderRequestDTO request) {
         Orders order = new Orders();
         order.setStatus(OrderStatus.PENDING);
-        order.setCustomer(customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                    "Customer not found with id: " + request.getCustomerId()
-                )));
+        // The customer is taken from the authenticated user, not the request body.
+        order.setCustomer(currentCustomer());
 
         order.setOrderItems(request.getOrderItems().stream()
                 .map(itemRequest -> {

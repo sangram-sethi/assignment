@@ -1,0 +1,41 @@
+.types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.6rem;
+}
+
+.summary {
+  position: sticky;
+  top: 84px;
+}
+.emi {
+  margin: 0.3rem 0 1.2rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 4.5vw, 2.9rem);
+  line-height: 1;
+}
+.sbtn {
+  height: 50px;
+}
+.foot-note {
+  margin: 0.9rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--faint);
+}
+.foot-note a {
+  color: var(--violet);
+  font-weight: 700;
+  text-decoration: none;
+}
+.foot-note a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1023px) {
+  .summary {
+    position: static;
+  }
+}

@@ -15,6 +15,8 @@ public interface OrderService {
 
     List<OrderResponseDTO> getOrdersByCustomer(Long customerId);
 
+    List<OrderResponseDTO> getMyOrders();
+
     OrderResponseDTO approveOrder(Long orderId);
 
     OrderResponseDTO rejectOrder(Long orderId);

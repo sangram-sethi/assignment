@@ -86,6 +86,45 @@
                     <p class="mt-1 hidden text-xs text-red-400" data-error-for="address"></p>
                 </div>
 
+                <!-- Skills (multiple selection) -->
+                <div class="sm:col-span-2">
+                    <span class="block text-sm font-medium text-gray-200">Skills</span>
+                    <p class="mt-1 text-xs text-gray-400">Select all that apply.</p>
+                    <div class="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                        <label class="flex items-center gap-2 text-sm text-gray-300">
+                            <input type="checkbox" name="skills" value="C++"
+                                class="h-4 w-4 rounded border-white/20 bg-gray-900 text-indigo-500 focus:ring-indigo-500">
+                            C++
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-gray-300">
+                            <input type="checkbox" name="skills" value="Java"
+                                class="h-4 w-4 rounded border-white/20 bg-gray-900 text-indigo-500 focus:ring-indigo-500">
+                            Java
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-gray-300">
+                            <input type="checkbox" name="skills" value="Python"
+                                class="h-4 w-4 rounded border-white/20 bg-gray-900 text-indigo-500 focus:ring-indigo-500">
+                            Python
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-gray-300">
+                            <input type="checkbox" name="skills" value="JavaScript"
+                                class="h-4 w-4 rounded border-white/20 bg-gray-900 text-indigo-500 focus:ring-indigo-500">
+                            JavaScript
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-gray-300">
+                            <input type="checkbox" name="skills" value="C#"
+                                class="h-4 w-4 rounded border-white/20 bg-gray-900 text-indigo-500 focus:ring-indigo-500">
+                            C#
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-gray-300">
+                            <input type="checkbox" name="skills" value="Go"
+                                class="h-4 w-4 rounded border-white/20 bg-gray-900 text-indigo-500 focus:ring-indigo-500">
+                            Go
+                        </label>
+                    </div>
+                    <p class="mt-1 hidden text-xs text-red-400" data-error-for="skills"></p>
+                </div>
+
                 <!-- Actions -->
                 <div class="flex items-center justify-end gap-3 sm:col-span-2">
                     <button type="reset"

@@ -59,6 +59,11 @@ function validate(data) {
         valid = false;
     }
 
+    if (!data.skills.length) {
+        showError('skills', 'Please select at least one skill.');
+        valid = false;
+    }
+
     return valid;
 }
 
@@ -73,7 +78,8 @@ form.addEventListener('submit', (event) => {
         gender: form.gender.value,
         phone: form.phone.value,
         email: form.email.value,
-        address: form.address.value
+        address: form.address.value,
+        skills: Array.from(form.querySelectorAll('input[name="skills"]:checked')).map(el => el.value)
     };
 
     if (!validate(data)) {
@@ -84,6 +90,7 @@ form.addEventListener('submit', (event) => {
         <p class="font-medium text-green-200">Details submitted successfully!</p>
         <p class="mt-1">${data.name}, ${data.age} years, ${data.gender}</p>
         <p>${data.email} &middot; ${data.phone}</p>
+        <p class="mt-1">Skills: ${data.skills.join(', ')}</p>
     `;
     result.classList.remove('hidden');
     form.reset();

@@ -1,0 +1,133 @@
+<a class="back" routerLink="/loans"><app-icon name="chevronLeft" [size]="16" /> Back to loans</a>
+
+@if (loading()) {
+  <div class="skeleton" style="height: 160px"></div>
+  <div class="grid gap-4 mt-4 lg:grid-cols-3">
+    <div class="skeleton lg:col-span-2" style="height: 300px"></div>
+    <div class="skeleton" style="height: 300px"></div>
+  </div>
+} @else if (notFound()) {
+  <div class="card">
+    <app-empty-state icon="alert" title="Loan not found" sub="This application doesn't exist or is no longer available.">
+      <a class="btn btn-primary" routerLink="/loans"><app-icon name="arrowLeft" [size]="18" /> Back to loans</a>
+    </app-empty-state>
+  </div>
+} @else if (loan()) {
+  @let l = loan()!;
+
+  <div class="hero card" reveal="up">
+    <div class="hero-top">
+      <div class="htitle">
+        <span class="hic" [style.background]="meta()!.gradient"><app-icon [name]="meta()!.icon" [size]="26" /></span>
+        <div>
+          <p class="eyebrow">Application #{{ l.id }}</p>
+          <h1 class="font-display">{{ meta()!.label }}</h1>
+        </div>
+      </div>
+      <div class="hactions">
+        <app-status-badge [status]="l.status" />
+        <button class="btn btn-ghost" type="button" (click)="exportPdf()" magnetic>
+          <app-icon name="download" [size]="18" /> Export PDF
+        </button>
+      </div>
+    </div>
+    <div class="hero-figs">
+      <div><span>Loan amount</span><b class="tabular">{{ l.loanAmount | inr }}</b></div>
+      <div><span>Monthly EMI</span><b class="tabular">{{ l.monthlyEmi | inr }}</b></div>
+      <div><span>Interest rate</span><b class="tabular">{{ l.interestRate }}% p.a.</b></div>
+      <div><span>Tenure</span><b class="tabular">{{ l.tenureMonths }} months</b></div>
+    </div>
+  </div>
+
+  <div class="grid gap-4 mt-4 lg:grid-cols-3 items-start">
+    <div class="lg:col-span-2 flex flex-col gap-4">
+      <div class="card p-6" reveal="up">
+        <h3 class="sec-title">Application details</h3>
+        <div class="dgrid">
+          <div class="drow"><span>Purpose</span><b>{{ l.purpose }}</b></div>
+          <div class="drow"><span>Applied on</span><b>{{ l.applicationDate | dateTime }}</b></div>
+          <div class="drow"><span>Total interest</span><b>{{ l.totalInterest | inr }}</b></div>
+          <div class="drow"><span>Total payable</span><b>{{ l.totalPayable | inr }}</b></div>
+          @if (l.approvedBy) {
+            <div class="drow"><span>Reviewed by</span><b>{{ l.approvedBy }}</b></div>
+          }
+        </div>
+      </div>
+
+      <div class="card p-6" reveal="up" [revealDelay]="0.05">
+        <h3 class="sec-title">Status timeline</h3>
+        <ul class="timeline">
+          <li class="done">
+            <span class="tdot"><app-icon name="check" [size]="12" [strokeWidth]="3" /></span>
+            <div><b>Application submitted</b><em>{{ l.applicationDate | dateTime }}</em></div>
+          </li>
+          @if (l.status === 'PENDING') {
+            <li class="active">
+              <span class="tdot pulse"><app-icon name="clock" [size]="12" /></span>
+              <div><b>Awaiting review</b><em>Our team is reviewing your application.</em></div>
+            </li>
+          } @else {
+            <li [class.done]="l.status === 'APPROVED'" [class.rej]="l.status === 'REJECTED'">
+              <span class="tdot">
+                <app-icon [name]="l.status === 'APPROVED' ? 'check' : 'x'" [size]="12" [strokeWidth]="3" />
+              </span>
+              <div>
+                <b>{{ l.status === 'APPROVED' ? 'Approved' : 'Rejected' }}{{ l.approvedBy ? ' by ' + l.approvedBy : '' }}</b>
+                <em>{{ l.remarks || 'Decision recorded.' }}</em>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="card p-6" reveal="up" [revealDelay]="0.1">
+      <h3 class="sec-title text-center">Payment breakdown</h3>
+      <app-donut-chart
+        [segments]="segments()"
+        [height]="190"
+        [centerTop]="totalPayableCompact()"
+        centerBottom="TOTAL PAYABLE"
+      />
+      <div class="flex flex-col gap-2.5 mt-4">
+        <div class="rrow"><span><span class="dot" style="background: #7c5cff"></span> Principal</span><b class="tabular">{{ l.loanAmount | inr }}</b></div>
+        <div class="rrow"><span><span class="dot" style="background: #38bdf8"></span> Interest</span><b class="tabular">{{ l.totalInterest | inr }}</b></div>
+        <div class="divider my-1"></div>
+        <div class="rrow total"><span>Total</span><b class="tabular">{{ l.totalPayable | inr }}</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-6 mt-4" reveal="up">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="sec-title" style="margin: 0">Repayment schedule</h3>
+      <button class="btn btn-ghost btn-icon" type="button" (click)="exportPdf()" aria-label="Export PDF">
+        <app-icon name="download" [size]="18" />
+      </button>
+    </div>
+    <div class="table-wrap no-scrollbar">
+      <table class="sched">
+        <thead>
+          <tr><th>#</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>
+        </thead>
+        <tbody>
+          @for (r of visibleRows(); track r.month) {
+            <tr>
+              <td class="mono">{{ r.month }}</td>
+              <td class="tabular">{{ r.emi | inr }}</td>
+              <td class="tabular pri">{{ r.principal | inr }}</td>
+              <td class="tabular int">{{ r.interest | inr }}</td>
+              <td class="tabular bal">{{ r.balance | inr }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (schedule().length > 12) {
+      <button class="btn btn-ghost w-full mt-3" type="button" (click)="showAll.set(!showAll())">
+        {{ showAll() ? 'Show less' : 'Show all ' + schedule().length + ' months' }}
+        <app-icon [name]="showAll() ? 'chevronLeft' : 'chevronDown'" [size]="16" />
+      </button>
+    }
+  </div>
+}

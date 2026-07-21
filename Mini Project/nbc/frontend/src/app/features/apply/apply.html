@@ -1,0 +1,136 @@
+<app-page-header
+  eyebrow="New application"
+  title="Apply for a loan"
+  subtitle="Choose your loan, set the amount and tenure, and submit in seconds."
+>
+  <a class="btn btn-ghost" routerLink="/calculator" magnetic>
+    <app-icon name="calculator" [size]="18" /> Recalculate
+  </a>
+</app-page-header>
+
+<div class="grid gap-4 lg:grid-cols-5 items-start">
+  <!-- controls -->
+  <div class="card p-6 lg:col-span-3 flex flex-col gap-7" reveal="up">
+    <div>
+      <p class="label mb-3">Loan type</p>
+      <div class="types">
+        @for (t of types; track t.type) {
+          <button
+            type="button"
+            class="type-pill"
+            [class.on]="loanType() === t.type"
+            (click)="loanType.set(t.type)"
+          >
+            <span class="tp-ic" [style.background]="t.gradient"><app-icon [name]="t.icon" [size]="18" /></span>
+            <span class="tp-info">
+              <b>{{ t.short }}</b>
+              <em>{{ t.rate }}% p.a.</em>
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <p class="label">Loan amount</p>
+        <div class="val-input">
+          <span>₹</span>
+          <input type="number" [value]="amount()" (input)="setAmount($event)" min="50000" max="10000000" />
+        </div>
+      </div>
+      <input
+        class="slider"
+        type="range"
+        min="50000"
+        max="10000000"
+        step="10000"
+        [value]="amount()"
+        (input)="setAmount($event)"
+        [style.--pct.%]="amountPct()"
+      />
+      <div class="scale"><span>₹50K</span><span>₹1 Cr</span></div>
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <p class="label">Tenure</p>
+        <div class="val-input">
+          <input type="number" [value]="tenure()" (input)="setTenure($event)" min="6" max="360" />
+          <span>months</span>
+        </div>
+      </div>
+      <input
+        class="slider"
+        type="range"
+        min="6"
+        max="360"
+        step="6"
+        [value]="tenure()"
+        (input)="setTenure($event)"
+        [style.--pct.%]="tenurePct()"
+      />
+      <div class="scale"><span>6 months</span><span>{{ tenureYears() }} years</span></div>
+    </div>
+
+    <div class="field">
+      <label class="label" for="purpose">Purpose of the loan</label>
+      <textarea
+        id="purpose"
+        class="textarea"
+        rows="3"
+        placeholder="e.g. Home renovation, new car, tuition fees…"
+        [value]="purpose()"
+        (input)="setPurpose($event)"
+      ></textarea>
+      @if (purposeInvalid()) {
+        <span class="field-err"><app-icon name="alert" [size]="13" /> Please describe the purpose (min. 3 characters)</span>
+      }
+    </div>
+
+    @if (error()) {
+      <div class="form-alert" animate.enter="anim-pop">
+        <app-icon name="alert" [size]="16" /> {{ error() }}
+      </div>
+    }
+  </div>
+
+  <!-- summary -->
+  <div class="card p-6 lg:col-span-2 summary" reveal="up" [revealDelay]="0.1">
+    <p class="label text-center">Estimated monthly EMI</p>
+    <p class="emi text-gradient tabular">{{ result().emi | inr: true }}</p>
+
+    <app-donut-chart
+      [segments]="segments()"
+      [height]="176"
+      [centerTop]="totalPayableCompact()"
+      centerBottom="TOTAL PAYABLE"
+    />
+
+    <div class="flex flex-col gap-2.5 mt-4">
+      <div class="rrow">
+        <span><span class="dot" style="background: #7c5cff"></span> Principal</span>
+        <b class="tabular">{{ amount() | inr }}</b>
+      </div>
+      <div class="rrow">
+        <span><span class="dot" style="background: #38bdf8"></span> Total interest</span>
+        <b class="tabular">{{ result().totalInterest | inr }}</b>
+      </div>
+      <div class="divider my-1"></div>
+      <div class="rrow total">
+        <span>Total payable</span>
+        <b class="tabular">{{ result().totalPayable | inr }}</b>
+      </div>
+    </div>
+
+    <div class="rate-note mt-4">
+      <app-icon name="percent" [size]="16" /> Interest fixed at <b>&nbsp;{{ rate() }}% p.a.</b>
+    </div>
+
+    <button class="btn btn-primary w-full mt-5 sbtn" type="button" (click)="submit()" [disabled]="submitting()" magnetic ripple>
+      @if (submitting()) { <span class="spinner"></span> Submitting… }
+      @else { Submit application <app-icon name="arrowUpRight" [size]="18" /> }
+    </button>
+    <p class="foot-note">You can track the decision anytime in <a routerLink="/loans">My Loans</a>.</p>
+  </div>
+</div>

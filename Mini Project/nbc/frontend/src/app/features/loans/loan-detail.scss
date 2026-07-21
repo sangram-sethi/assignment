@@ -1,0 +1,244 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.88rem;
+  margin-bottom: 1.1rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.back:hover {
+  color: var(--ink);
+  transform: translateX(-3px);
+}
+
+/* hero */
+.hero {
+  padding: 1.6rem 1.8rem;
+  overflow: hidden;
+}
+.hero-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.htitle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 1.1rem;
+  color: #fff;
+  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.6);
+}
+.eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--violet);
+}
+.htitle h1 {
+  margin: 0.2rem 0 0;
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.hactions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+.hero-figs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.6rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.hero-figs > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.hero-figs span {
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+.hero-figs b {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.sec-title {
+  margin: 0 0 1.1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* details grid */
+.dgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+.drow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.drow span {
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+.drow b {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* timeline */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.timeline li {
+  position: relative;
+  display: flex;
+  gap: 0.9rem;
+  padding: 0 0 1.4rem 0;
+}
+.timeline li:last-child {
+  padding-bottom: 0;
+}
+.timeline li::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--line);
+}
+.timeline li:last-child::before {
+  display: none;
+}
+.tdot {
+  flex: none;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--muted);
+}
+.timeline li.done .tdot {
+  background: rgba(52, 211, 153, 0.16);
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #34d399;
+}
+.timeline li.active .tdot {
+  background: rgba(251, 191, 36, 0.16);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fbbf24;
+}
+.timeline li.rej .tdot {
+  background: rgba(251, 113, 133, 0.16);
+  border-color: rgba(251, 113, 133, 0.4);
+  color: #fb7185;
+}
+.tdot.pulse {
+  animation: pulse-ring 2s infinite;
+}
+.timeline b {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.timeline em {
+  display: block;
+  margin-top: 0.2rem;
+  font-style: normal;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* schedule table */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 0.9rem;
+  border: 1px solid var(--line);
+}
+.sched {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  min-width: 460px;
+}
+.sched th {
+  text-align: right;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+}
+.sched th:first-child {
+  text-align: left;
+}
+.sched td {
+  padding: 0.62rem 0.9rem;
+  text-align: right;
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+}
+.sched td.mono {
+  text-align: left;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+.sched tbody tr:hover td {
+  background: var(--surface);
+}
+.sched td.pri {
+  color: #34d399;
+}
+.sched td.int {
+  color: #fb7185;
+}
+.sched td.bal {
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .hero-figs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dgrid {
+    grid-template-columns: 1fr;
+  }
+}

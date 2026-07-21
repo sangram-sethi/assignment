@@ -1,0 +1,47 @@
+{
+  "numpy_statistics": {
+    "mean_loan_amount": 941212.1212121212,
+    "median_salary": 97000.0,
+    "interest_rate_25th_percentile": 9.149999999999999,
+    "interest_rate_50th_percentile": 10.0,
+    "interest_rate_75th_percentile": 11.5,
+    "interest_rate_90th_percentile": 12.62,
+    "salary_loan_correlation": 0.20987720738214066,
+    "loan_amount_std": 588216.3979031587,
+    "salary_std": 38290.108846355724
+  },
+  "finance_metrics": {
+    "total_loans": 99,
+    "total_exposure": 93180000.0,
+    "average_dti": 1.616998508122211,
+    "average_loan_utilization": 0.49109888568221904,
+    "default_pct": 33.33333333333333,
+    "npa_pct": 16.849109250912214,
+    "average_emi": 12689.89898989899,
+    "total_expected_loss": 5885730.0,
+    "average_expected_loss": 59451.818181818184
+  },
+  "high_risk_customer_count": 20,
+  "high_risk_customer_ids": [
+    180,
+    148,
+    124,
+    161,
+    119,
+    128,
+    155,
+    139,
+    151,
+    136,
+    108,
+    196,
+    106,
+    192,
+    168,
+    190,
+    198,
+    146,
+    135,
+    183
+  ]
+}

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <title>Aurora — NBC Loan Studio</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#070a18" />
+    <meta
+      name="description"
+      content="NBC Loan Studio — a premium lending experience. Apply, calculate EMI, and manage approvals."
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Pre-boot splash — avoids white flash and greets before Angular hydrates */
+      html,
+      body {
+        margin: 0;
+        background: #070a18;
+      }
+      #boot {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(60% 60% at 30% 20%, rgba(124, 92, 255, 0.28), transparent 60%),
+          radial-gradient(50% 50% at 80% 30%, rgba(56, 189, 248, 0.22), transparent 60%),
+          radial-gradient(50% 50% at 60% 90%, rgba(255, 110, 169, 0.2), transparent 60%), #070a18;
+        z-index: 9999;
+        transition: opacity 0.6s ease;
+        font-family: 'Sora', system-ui, sans-serif;
+      }
+      #boot.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .boot-mark {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .boot-ring {
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        border-top-color: #8b6dff;
+        border-right-color: #38bdf8;
+        animation: bootspin 0.9s linear infinite;
+        filter: drop-shadow(0 0 18px rgba(139, 109, 255, 0.55));
+      }
+      .boot-word {
+        color: #eef1ff;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        font-size: 13px;
+        text-transform: uppercase;
+        opacity: 0.8;
+      }
+      @keyframes bootspin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <app-root></app-root>
+    <div id="boot">
+      <div class="boot-mark">
+        <div class="boot-ring"></div>
+        <div class="boot-word">Aurora Loan Studio</div>
+      </div>
+    </div>
+    <script>
+      // Apply saved theme before paint to prevent a flash of the wrong theme
+      (function () {
+        try {
+          var t = localStorage.getItem('aurora-theme');
+          if (t) document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+      // Remove splash once the app has rendered
+      window.addEventListener('DOMContentLoaded', function () {
+        requestAnimationFrame(function () {
+          setTimeout(function () {
+            var b = document.getElementById('boot');
+            if (b) {
+              b.classList.add('hide');
+              setTimeout(function () {
+                b.remove();
+              }, 650);
+            }
+          }, 350);
+        });
+      });
+    </script>
+  </body>
+</html>

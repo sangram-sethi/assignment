@@ -1,0 +1,36 @@
+<header class="app-nav">
+  <a class="brand" routerLink="/products">
+    <span class="brand-mark">◆</span>
+    <span class="brand-name">MyShop</span>
+  </a>
+
+  <nav class="nav-links">
+    <a routerLink="/products" routerLinkActive="active">Shop</a>
+    @if (auth.isLoggedIn()) {
+      @if (!auth.isAdmin()) {
+        <a routerLink="/orders/my" routerLinkActive="active">My Orders</a>
+      }
+      @if (auth.isAdmin()) {
+        <a routerLink="/orders/approvals" routerLinkActive="active">Approvals</a>
+      }
+    }
+  </nav>
+
+  @if (auth.isLoggedIn()) {
+    <div class="nav-actions">
+      @if (!auth.isAdmin()) {
+        <a class="cart-link" routerLink="/orders/cart" routerLinkActive="active" aria-label="Cart">
+          <span class="cart-icon">🛒</span>
+          @if (cart.count() > 0) {
+            <span class="cart-count">{{ cart.count() }}</span>
+          }
+        </a>
+      }
+      <button type="button" class="btn-ghost" (click)="logout()">Logout</button>
+    </div>
+  }
+</header>
+
+<main>
+  <router-outlet />
+</main>

@@ -1,0 +1,46 @@
+<section class="orders">
+  <div class="toolbar">
+    <h1>My orders</h1>
+  </div>
+
+  @if (loading()) {
+    <p class="muted">Loading…</p>
+  }
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (!loading() && !error()) {
+    <table>
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Status</th>
+          <th>Items</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of myOrders(); track order.orderId) {
+          <tr>
+            <td>#{{ order.orderId }}</td>
+            <td><span [class]="badgeClass(order.status)">{{ order.status }}</span></td>
+            <td>
+              <ul class="item-lines">
+                @for (item of order.items; track item.productId) {
+                  <li>{{ item.productName }} × {{ item.quantity }}</li>
+                }
+              </ul>
+            </td>
+            <td>{{ order.totalAmount | currency }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4">You haven't placed any orders yet.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

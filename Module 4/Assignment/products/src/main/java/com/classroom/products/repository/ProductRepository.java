@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>  {
                 p.id, p.category, p.productName, p.brand, p.price)
             FROM Product p
             WHERE (:category IS NULL OR p.category = :category)
-              AND (:brand IS NULL OR LOWER(p.brand) = LOWER(:brand))
+              AND (CAST(:brand AS string) IS NULL OR LOWER(p.brand) = LOWER(CAST(:brand AS string)))
             """)
     Page<ProductResponseDTO> filterProducts(
             @Param("category") Category category,

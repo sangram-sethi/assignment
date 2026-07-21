@@ -1,0 +1,56 @@
+<section class="orders">
+  <div class="toolbar">
+    <h1>Pending approvals</h1>
+    <button type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+  </div>
+
+  @if (loading()) {
+    <p class="muted">Loading…</p>
+  }
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (!loading() && !error()) {
+    <table>
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of pendingOrders(); track order.orderId) {
+          <tr>
+            <td>#{{ order.orderId }}</td>
+            <td>#{{ order.customerId }}</td>
+            <td>
+              <ul class="item-lines">
+                @for (item of order.items; track item.productId) {
+                  <li>{{ item.productName }} × {{ item.quantity }}</li>
+                }
+              </ul>
+            </td>
+            <td>{{ order.totalAmount | currency }}</td>
+            <td>
+              <button type="button" class="btn-success"
+                      [disabled]="acting() === order.orderId"
+                      (click)="approve(order.orderId)">Approve</button>
+              <button type="button" class="btn-danger"
+                      [disabled]="acting() === order.orderId"
+                      (click)="reject(order.orderId)">Reject</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5">No orders are awaiting approval.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

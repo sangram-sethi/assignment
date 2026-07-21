@@ -1,0 +1,123 @@
+<app-page-header
+  eyebrow="Review"
+  title="Approval Queue"
+  subtitle="Review pending applications and record your decision."
+>
+  <div class="qstats">
+    <div class="qstat">
+      <span>Pending</span><b class="tabular">{{ pending().length }}</b>
+    </div>
+    <div class="qstat">
+      <span>Total value</span><b class="tabular">{{ totalValue() | inr }}</b>
+    </div>
+  </div>
+</app-page-header>
+
+@if (loading()) {
+  <div class="grid gap-4 xl:grid-cols-2">
+    @for (i of [1, 2, 3, 4]; track i) {
+      <div class="skeleton" style="height: 236px"></div>
+    }
+  </div>
+} @else if (pending().length) {
+  <div class="grid gap-4 xl:grid-cols-2">
+    @for (loan of pending(); track loan.id) {
+      <div class="pcard card card-hover" reveal="up" [revealDistance]="16">
+        <div class="pc-head">
+          <span class="pic" [style.background]="meta(loan).gradient">
+            <app-icon [name]="meta(loan).icon" [size]="22" />
+          </span>
+          <div class="pc-t">
+            <p class="pt">{{ meta(loan).label }}</p>
+            <p class="ps">#{{ loan.id }} · {{ loan.applicationDate | shortDate }}</p>
+          </div>
+          <span class="pamt tabular">{{ loan.loanAmount | inr }}</span>
+        </div>
+
+        <p class="pc-purpose">“{{ loan.purpose }}”</p>
+
+        <div class="pc-figs">
+          <div><span>Monthly EMI</span><b class="tabular">{{ loan.monthlyEmi | inr }}</b></div>
+          <div><span>Rate</span><b class="tabular">{{ loan.interestRate }}%</b></div>
+          <div><span>Tenure</span><b class="tabular">{{ loan.tenureMonths }} mo</b></div>
+          <div><span>Total payable</span><b class="tabular">{{ loan.totalPayable | inr }}</b></div>
+        </div>
+
+        <div class="pc-actions">
+          <button class="btn btn-ghost rej" type="button" (click)="openDecision(loan, 'REJECTED')">
+            <app-icon name="x" [size]="17" /> Reject
+          </button>
+          <button class="btn btn-success" type="button" (click)="openDecision(loan, 'APPROVED')" ripple>
+            <app-icon name="check" [size]="17" /> Approve
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="card">
+    <app-empty-state
+      icon="checkCircle"
+      title="All caught up!"
+      sub="There are no pending applications to review right now. Great work."
+    />
+  </div>
+}
+
+<app-modal
+  [open]="!!decisionLoan()"
+  [title]="decisionType() === 'APPROVED' ? 'Approve application' : 'Reject application'"
+  [eyebrow]="'Application #' + (decisionLoan()?.id ?? '')"
+  (close)="closeDecision()"
+>
+  @if (decisionLoan(); as d) {
+    <div class="dsum">
+      <span class="pic sm" [style.background]="meta(d).gradient">
+        <app-icon [name]="meta(d).icon" [size]="18" />
+      </span>
+      <div>
+        <p class="pt">{{ meta(d).label }} · {{ d.loanAmount | inr }}</p>
+        <p class="ps">EMI {{ d.monthlyEmi | inr }} · {{ d.tenureMonths }} months</p>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top: 1.2rem">
+      <label class="label">Reviewer remarks</label>
+      <textarea
+        class="textarea"
+        rows="3"
+        [value]="remarks()"
+        (input)="setRemarks($event)"
+        [placeholder]="
+          decisionType() === 'APPROVED'
+            ? 'e.g. Income and documents verified.'
+            : 'e.g. Insufficient income for the requested amount.'
+        "
+      ></textarea>
+      @if (tried() && remarks().trim().length < 3) {
+        <span class="field-err"><app-icon name="alert" [size]="13" /> Please add a remark (min. 3 characters)</span>
+      }
+    </div>
+
+    <div class="dactions">
+      <button class="btn btn-ghost" type="button" (click)="closeDecision()" [disabled]="processing()">
+        Cancel
+      </button>
+      <button
+        class="btn"
+        type="button"
+        [class.btn-success]="decisionType() === 'APPROVED'"
+        [class.btn-danger]="decisionType() === 'REJECTED'"
+        (click)="confirm()"
+        [disabled]="processing()"
+      >
+        @if (processing()) {
+          <span class="spinner"></span> Processing…
+        } @else {
+          <app-icon [name]="decisionType() === 'APPROVED' ? 'check' : 'x'" [size]="18" />
+          {{ decisionType() === 'APPROVED' ? 'Confirm approval' : 'Confirm rejection' }}
+        }
+      </button>
+    </div>
+  }
+</app-modal>

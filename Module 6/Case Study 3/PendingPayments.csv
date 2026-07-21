@@ -1,0 +1,26 @@
+LoanID,CustomerName,City,LoanType,LoanAmount,EMIAmount,PaidEMIs,PendingEMIs,EMIDue,PaymentCompletionPct,PaymentStatus
+L1001,Aarav Sharma,Chennai,Home Loan,3500000,10500,25,35,367500,41.67,Partial
+L1002,Priya Nair,Bengaluru,Personal Loan,500000,8750,18,42,367500,30.0,Partial
+L1003,Rahul Verma,Hyderabad,Car Loan,900000,12500,36,24,300000,60.0,Partial
+L1004,Neha Gupta,Mumbai,Education Loan,1200000,9800,12,48,470400,20.0,Partial
+L1005,Vikram Singh,Delhi,Business Loan,7500000,15200,40,20,304000,66.67,Partial
+L1006,Anjali Reddy,Hyderabad,Home Loan,4500000,7200,8,52,374400,13.33,Partial
+L1007,Karthik Raj,Chennai,Gold Loan,350000,18500,50,10,185000,83.33,Partial
+L1008,Sneha Patil,Pune,Personal Loan,650000,9100,20,40,364000,33.33,Partial
+L1009,Arjun Kumar,Bengaluru,Car Loan,1100000,11000,28,32,352000,46.67,Partial
+L1010,Meera Joshi,Ahmedabad,Business Loan,9500000,6400,6,54,345600,10.0,Partial
+L1011,Rohan Das,Kolkata,Home Loan,5200000,13800,32,28,386400,53.33,Partial
+L1012,Kavya Iyer,Chennai,Education Loan,1500000,9900,24,36,356400,40.0,Partial
+L1013,Manoj Patel,Surat,Personal Loan,400000,16000,45,15,240000,75.0,Partial
+L1014,Divya Menon,Kochi,Gold Loan,250000,8100,15,45,364500,25.0,Partial
+L1015,Suresh Rao,Vijayawada,Home Loan,6100000,11750,27,33,387750,45.0,Partial
+L1016,Pooja Sharma,Jaipur,Car Loan,850000,14300,38,22,314600,63.33,Partial
+L1017,Ajay Mishra,Lucknow,Business Loan,12000000,6900,5,55,379500,8.33,Partial
+L1018,Nisha Kapoor,Delhi,Education Loan,1800000,13250,31,29,384250,51.67,Partial
+L1019,Deepak Yadav,Noida,Personal Loan,550000,10400,22,38,395200,36.67,Partial
+L1020,Ritika Sen,Bhubaneswar,Home Loan,4800000,9600,19,41,393600,31.67,Partial
+L1021,Harish Kumar,Coimbatore,Car Loan,950000,17600,48,12,211200,80.0,Partial
+L1022,Aishwarya Rao,Mysuru,Business Loan,6800000,8400,14,46,386400,23.33,Partial
+L1023,Naveen Babu,Visakhapatnam,Gold Loan,300000,12800,30,30,384000,50.0,Partial
+L1024,Lakshmi Devi,Madurai,Personal Loan,700000,15000,42,18,270000,70.0,Partial
+L1025,Sanjay Mehta,Indore,Home Loan,3900000,9300,17,43,399900,28.33,Partial

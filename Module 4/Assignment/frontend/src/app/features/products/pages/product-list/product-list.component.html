@@ -1,0 +1,68 @@
+<section class="shop">
+  <div class="shop-header">
+    <div>
+      <h1>Discover products</h1>
+      <p class="shop-sub">
+        @if (!loading() && !error()) {
+          {{ products().length }} item{{ products().length === 1 ? '' : 's' }} available
+        } @else {
+          Browse our latest tech
+        }
+      </p>
+    </div>
+    @if (isAdmin()) {
+      <button type="button" (click)="addProduct()">+ Add product</button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="product-grid">
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <div class="product-card skeleton-card"></div>
+      }
+    </div>
+  }
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (addedName()) {
+    <div class="toast">
+      <span class="toast-check">✓</span> Added “{{ addedName() }}” to your cart
+    </div>
+  }
+
+  @if (!loading() && !error()) {
+    <div class="product-grid">
+      @for (product of products(); track product.id) {
+        <article class="product-card">
+          <div class="product-thumb thumb-{{ product.category | lowercase }}">
+            <span class="thumb-emoji">{{ categoryIcon(product.category) }}</span>
+            <span class="thumb-badge">{{ product.category }}</span>
+          </div>
+          <div class="product-body">
+            <p class="product-brand">{{ product.brand }}</p>
+            <h3 class="product-name">{{ product.productName }}</h3>
+            <p class="product-price">{{ product.price | currency }}</p>
+          </div>
+          <div class="product-actions">
+            @if (isAdmin()) {
+              <button type="button" class="btn-ghost" (click)="editProduct(product.id)">Edit</button>
+              <button type="button" class="btn-danger" (click)="deleteProduct(product.id)">Delete</button>
+            } @else {
+              <button type="button" class="btn-cart" (click)="addToCart(product)">
+                Add to cart
+              </button>
+            }
+          </div>
+        </article>
+      } @empty {
+        <div class="empty-state">
+          <span class="empty-emoji">🛒</span>
+          <p>No products found.</p>
+        </div>
+      }
+    </div>
+  }
+</section>
