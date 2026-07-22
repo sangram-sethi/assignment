@@ -5,7 +5,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Track, TrackRequest } from '../../models/track.model';
@@ -14,10 +14,19 @@ import { TrackForm } from '../../components/track-form/track-form';
 
 const MAX_SUGGESTIONS = 8;
 
+const ACCENTS = [
+  'from-indigo-500 to-fuchsia-500',
+  'from-sky-500 to-blue-600',
+  'from-rose-500 to-orange-500',
+  'from-emerald-500 to-teal-500',
+  'from-violet-500 to-purple-600',
+  'from-amber-500 to-pink-500',
+];
+
 @Component({
   selector: 'app-track-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, DatePipe, TrackForm],
+  imports: [FormsModule, DatePipe, DecimalPipe, TrackForm],
   templateUrl: './track-list.html',
 })
 export class TrackList {
@@ -29,10 +38,20 @@ export class TrackList {
   protected readonly error = signal<string | null>(null);
   protected readonly query = signal('');
   protected readonly showSuggestions = signal(false);
+  protected readonly showAddPanel = signal(false);
 
   /** Tracks shown in the table, prefix-filtered and ranked by play count. */
   protected readonly filteredTracks = computed(() =>
     this.rank(this.allTracks(), this.query()),
+  );
+
+  /** Aggregate stats for the hero header. */
+  protected readonly totalTracks = computed(() => this.allTracks().length);
+  protected readonly totalPlays = computed(() =>
+    this.allTracks().reduce((sum, t) => sum + (t.playCount ?? 0), 0),
+  );
+  protected readonly totalAlbums = computed(
+    () => new Set(this.allTracks().map((t) => t.albumName)).size,
   );
 
   /** Autocomplete dropdown entries: top most-played prefix matches. */
@@ -78,10 +97,17 @@ export class TrackList {
     this.showSuggestions.set(false);
   }
 
+  protected toggleAddPanel(): void {
+    this.showAddPanel.update((open) => !open);
+  }
+
   protected createTrack(request: TrackRequest): void {
     this.error.set(null);
     this.trackService.create(request).subscribe({
-      next: (created) => this.allTracks.update((list) => [created, ...list]),
+      next: (created) => {
+        this.allTracks.update((list) => [created, ...list]);
+        this.showAddPanel.set(false);
+      },
       error: () => this.error.set('Failed to create the track.'),
     });
   }
@@ -93,6 +119,21 @@ export class TrackList {
         this.allTracks.update((list) => list.filter((t) => t.id !== id)),
       error: () => this.error.set('Failed to delete the track.'),
     });
+  }
+
+  /** First letter used for the generated album-art tile. */
+  protected initial(track: Track): string {
+    return (track.title?.trim()[0] ?? '?').toUpperCase();
+  }
+
+  /** Deterministic gradient per track so art tiles look consistent. */
+  protected accent(track: Track): string {
+    const key = track.title ?? '';
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+    }
+    return ACCENTS[hash % ACCENTS.length];
   }
 
   /**

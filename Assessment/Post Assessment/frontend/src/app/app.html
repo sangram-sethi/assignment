@@ -1,10 +1,43 @@
-<div class="min-h-screen bg-slate-50">
-  <nav class="border-b border-slate-200 bg-white">
-    <div class="mx-auto flex max-w-5xl items-center gap-2 px-4 py-4">
-      <span class="text-lg font-bold text-indigo-600">&#9834; TrackHub</span>
+<div class="relative min-h-screen">
+  <!-- Top navigation -->
+  <header class="sticky top-0 z-30 border-b border-white/5 bg-[#05060f]/70 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+      <a class="group flex items-center gap-3" href="/">
+        <span
+          class="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500 via-fuchsia-500 to-rose-500 shadow-lg shadow-fuchsia-500/30 transition group-hover:scale-105"
+        >
+          <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+          </svg>
+        </span>
+        <span class="flex flex-col leading-tight">
+          <span class="text-lg font-extrabold tracking-tight text-white">Aurora</span>
+          <span class="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-400">Music Studio</span>
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-8 text-sm font-medium text-slate-300 sm:flex">
+        <a class="transition hover:text-white" href="/">Library</a>
+        <a class="transition hover:text-white" href="/">Charts</a>
+        <a class="transition hover:text-white" href="/">Artists</a>
+      </nav>
+
+      <button
+        type="button"
+        class="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/20"
+      >
+        Upgrade
+      </button>
     </div>
-  </nav>
-  <main>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-5 pb-24 pt-10">
     <router-outlet />
   </main>
+
+  <footer class="border-t border-white/5 py-8 text-center text-xs text-slate-500">
+    Crafted with Angular &amp; Tailwind &middot; Aurora Music Studio
+  </footer>
 </div>

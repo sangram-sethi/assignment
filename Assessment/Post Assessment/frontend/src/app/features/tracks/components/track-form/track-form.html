@@ -1,65 +1,66 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid gap-4 sm:grid-cols-2">
-  <div class="flex flex-col gap-1">
-    <label for="title" class="text-sm font-medium text-slate-700">Title</label>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid gap-5 sm:grid-cols-2">
+  <div class="flex flex-col gap-1.5">
+    <label for="title" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Title</label>
     <input
       id="title"
       type="text"
       formControlName="title"
       placeholder="Track title"
-      class="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+      class="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-indigo-400/50 focus:bg-white/10 focus:ring-2 focus:ring-indigo-500/30"
     />
     @if (form.controls.title.touched && form.controls.title.invalid) {
-      <span class="text-xs text-rose-600">Title is required.</span>
+      <span class="text-xs text-rose-400">Title is required.</span>
     }
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="albumName" class="text-sm font-medium text-slate-700">Album</label>
+  <div class="flex flex-col gap-1.5">
+    <label for="albumName" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Album</label>
     <input
       id="albumName"
       type="text"
       formControlName="albumName"
       placeholder="Album name"
-      class="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+      class="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-indigo-400/50 focus:bg-white/10 focus:ring-2 focus:ring-indigo-500/30"
     />
     @if (form.controls.albumName.touched && form.controls.albumName.invalid) {
-      <span class="text-xs text-rose-600">Album is required.</span>
+      <span class="text-xs text-rose-400">Album is required.</span>
     }
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="releaseDate" class="text-sm font-medium text-slate-700">Release date</label>
+  <div class="flex flex-col gap-1.5">
+    <label for="releaseDate" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Release date</label>
     <input
       id="releaseDate"
       type="date"
       formControlName="releaseDate"
-      class="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+      class="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white outline-none transition [color-scheme:dark] focus:border-indigo-400/50 focus:bg-white/10 focus:ring-2 focus:ring-indigo-500/30"
     />
     @if (form.controls.releaseDate.touched && form.controls.releaseDate.invalid) {
-      <span class="text-xs text-rose-600">Release date is required.</span>
+      <span class="text-xs text-rose-400">Release date is required.</span>
     }
   </div>
 
-  <div class="flex flex-col gap-1">
-    <label for="playCount" class="text-sm font-medium text-slate-700">Play count</label>
+  <div class="flex flex-col gap-1.5">
+    <label for="playCount" class="text-xs font-semibold uppercase tracking-wider text-slate-400">Play count</label>
     <input
       id="playCount"
       type="number"
       min="0"
       formControlName="playCount"
-      class="rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+      class="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white outline-none transition focus:border-indigo-400/50 focus:bg-white/10 focus:ring-2 focus:ring-indigo-500/30"
     />
     @if (form.controls.playCount.touched && form.controls.playCount.invalid) {
-      <span class="text-xs text-rose-600">Play count must be zero or more.</span>
+      <span class="text-xs text-rose-400">Play count must be zero or more.</span>
     }
   </div>
 
   <div class="sm:col-span-2">
     <button
       type="submit"
-      class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 disabled:cursor-not-allowed disabled:opacity-60"
+      class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/25 transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      Add track
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Save track
     </button>
   </div>
 </form>
