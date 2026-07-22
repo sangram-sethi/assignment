@@ -1,0 +1,119 @@
+<section class="mx-auto max-w-5xl px-4 py-8">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-slate-900">Music Tracks</h1>
+    <p class="mt-1 text-sm text-slate-500">
+      Manage your track catalogue — add, search and remove tracks.
+    </p>
+  </header>
+
+  <!-- Create form -->
+  <div class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="mb-4 text-lg font-semibold text-slate-800">Add a new track</h2>
+    <app-track-form (submitted)="createTrack($event)" />
+  </div>
+
+  <!-- Search -->
+  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div class="relative flex-1">
+      <input
+        type="text"
+        [ngModel]="query()"
+        (ngModelChange)="onQueryChange($event)"
+        (focus)="onQueryChange(query())"
+        placeholder="Search by title or album…"
+        autocomplete="off"
+        class="w-full rounded-lg border border-slate-300 px-4 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+      />
+
+      <!-- Autocomplete suggestions -->
+      @if (showSuggestions() && suggestions().length > 0) {
+        <ul
+          class="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+        >
+          @for (track of suggestions(); track track.id) {
+            <li>
+              <button
+                type="button"
+                (click)="selectSuggestion(track)"
+                class="flex w-full items-center justify-between gap-3 px-4 py-2 text-left text-sm transition hover:bg-indigo-50"
+              >
+                <span class="min-w-0">
+                  <span class="block truncate font-medium text-slate-800">{{ track.title }}</span>
+                  <span class="block truncate text-xs text-slate-500">{{ track.albumName }}</span>
+                </span>
+                <span class="shrink-0 text-xs tabular-nums text-slate-400">
+                  {{ track.playCount }} plays
+                </span>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        (click)="clearSearch()"
+        class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+      >
+        Reset
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+      {{ error() }}
+    </div>
+  }
+
+  <!-- States -->
+  @if (loading()) {
+    <div class="rounded-2xl border border-slate-200 bg-white p-10 text-center text-sm text-slate-500">
+      Loading tracks…
+    </div>
+  } @else if (filteredTracks().length === 0) {
+    <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">
+      @if (query().trim()) {
+        No tracks match “{{ query() }}”.
+      } @else {
+        No tracks yet. Add your first track above.
+      }
+    </div>
+  } @else {
+    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <tr>
+            <th class="px-6 py-3">Title</th>
+            <th class="px-6 py-3">Album</th>
+            <th class="px-6 py-3">Release date</th>
+            <th class="px-6 py-3 text-right">Plays</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (track of filteredTracks(); track track.id) {
+            <tr class="transition hover:bg-slate-50">
+              <td class="px-6 py-4 font-medium text-slate-900">{{ track.title }}</td>
+              <td class="px-6 py-4 text-slate-600">{{ track.albumName }}</td>
+              <td class="px-6 py-4 text-slate-600">{{ track.releaseDate | date: 'mediumDate' }}</td>
+              <td class="px-6 py-4 text-right tabular-nums text-slate-600">{{ track.playCount }}</td>
+              <td class="px-6 py-4 text-right">
+                <button
+                  type="button"
+                  (click)="deleteTrack(track.id)"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-50"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

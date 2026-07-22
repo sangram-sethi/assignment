@@ -1,5 +1,5 @@
 ## Environment:
-- Java version: 17
+- Java version: 21
 - Maven version: 3.*
 - Spring Boot version: 3.0.6
 
